@@ -11,4 +11,18 @@ def move_gaps(seq1, seq2):
     >>> move_gaps("AFASTCAT", "THEFASTCAT")
     ['THEFASTCAT', '--AFASTCAT', 'A--FASTCAT', 'AF--ASTCAT', 'AFA--STCAT', 'AFAS--TCAT', 'AFAST--CAT', 'AFASTC--AT', 'AFASTCA--T', 'AFASTCAT--']
     """
-    # YOUR CODE HERE
+    assert len(seq1) != len(seq2)
+    
+    if len(seq1) > len(seq2):
+        largest_alignment, moving_seq = seq1, seq2
+    else:
+        largest_alignment, moving_seq = seq2, seq1
+
+    num_alignments = len(moving_seq)
+    window = len(largest_alignment) - len(moving_seq)
+
+    movements = [largest_alignment]
+    movements = movements + [moving_seq[:i] + "-"*window + moving_seq[i:] for i in range(num_alignments + 1)]
+    
+    print(movements)
+    return None
