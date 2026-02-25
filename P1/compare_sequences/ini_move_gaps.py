@@ -21,8 +21,7 @@ def move_gaps(seq1, seq2):
     num_alignments = len(moving_seq)
     window = len(largest_alignment) - len(moving_seq)
 
-    movements = [largest_alignment]
-    movements = movements + [moving_seq[:i] + "-"*window + moving_seq[i:] for i in range(num_alignments + 1)]
-    
-    print(movements)
-    return None
+    movements = [largest_alignment] + [moving_seq[:i] + "-"*window + moving_seq[i:] 
+                                       for i in range(num_alignments + 1)]
+
+    return movements
