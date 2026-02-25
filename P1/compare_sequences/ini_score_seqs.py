@@ -13,4 +13,16 @@ def score_seqs(seq1, seq2, match, mismatch, gap):
     >>> score_seqs("THE-FASTCAT", "THE-FASTCAT", 1, -1, -2)
     10
     """
-    # YOUR CODE HERE
+    if len(seq1) != len(seq2):
+        return None
+    
+    pairs = zip(seq1, seq2)
+    score = sum( 
+        0 if x == "-" and y == "-" else
+        match if x == y else
+        gap if x == "-" or y == "-" else 
+        mismatch 
+        for x, y in pairs)
+    # When creating a ternary or mor expression, instead of elif, it's always else after alse...
+
+    return score
