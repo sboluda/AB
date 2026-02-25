@@ -34,4 +34,5 @@ def move_gaps_scores(seq1, seq2, match, mismatch, gap):
     for alignment in list_combinations[1:]:
         score = score_seqs(main_align, alignment, match, mismatch, gap)
         print(alignment + " " + str(score))
+        
     return None
