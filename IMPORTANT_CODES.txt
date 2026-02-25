@@ -1,0 +1,5 @@
+To run a doctest:
+python -m doctest -v your_file.py
+
+To run a test file:
+pytest test_your_file.py
