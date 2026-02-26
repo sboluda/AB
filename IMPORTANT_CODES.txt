@@ -1,3 +1,4 @@
+#-----------------------------------------------------------#
 To run a doctest (_ini_):
 python -m doctest -v your_file.py
 
@@ -8,7 +9,7 @@ pytest test_your_file.py
 #-----------------------------------------------------------#
 To update GitHub fork:
 git status                                      # To check
-git add .                                       # or git add -f path/to/file.py
+git add .                                       # or git add -f path/to/file.py to add files
 git commit -m "Describe what you changed"       # To commit a change
 git push origin main                            # MUST be in AB folder!!
 
