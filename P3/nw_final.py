@@ -90,4 +90,26 @@ def nw(seq_i, seq_j, match, mismatch, gap):
 
 nw(args.seq_i, args.seq_j, args.match, args.mismatch, args.gap)
 
+#-------------------------------------------------------------------------#
+### Exercise 2: Which parameter you have to decrease (match, mismatch or gap) to produce the following alignment? ###
+# THE-BIGCAT
+# THER----AT
 
+# Reducing the Gap value to 0 allows us to get that alignment, given that the first - after "THE" implies a gap being better than a mismatch
+
+### Exercise 3: Alternatively, you could have obtained the alignment in the same alignment above by letting the previous parameter untouched and increasing another parameter (match, mismatch or gap). Which one?
+
+# In this case, if we said that by decreasing the gap penalty we favour it rather than the mismatch, the alternative is to worsen the mismatch. By just giving a mismatch value of -4 we can get that
+
+### Exercise 4: Re-align the sequences THEBIGCAT and THERAT using a match score of +8, a mismatch score of −8, and a gap penalty of −4. Then reverse the order in which the sequences are provided to the program and recompute the alignment. What do you observe, and why does this happen?
+
+# We observe...
+# Optimal score: 20
+# Alignment:
+# THE----RAT
+# THEBIGC-AT
+
+# 1. The Optimal score is the same as if the order of the sequences was as before
+# 2. The gaps are still the same. As we see gap_value > mismatch_value, hence we prefer gaps over mismatches
+# 3. The align difference comes from the sequence positioning and how are the values located in the matrix. In this case, gaps appear earlier in sequence 1 (THERAT), while in the normal way, gaps appear first in the sequence 2 (THEBIGCAT)
+# TL:DR, Same score, different path
