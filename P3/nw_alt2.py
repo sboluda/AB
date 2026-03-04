@@ -12,7 +12,7 @@ args = parser.parse_args()
 def nw(seq_i, seq_j, match, mismatch, gap): # We change the order of the parameters!!
     # Store the lengths of the sequences
     n_i, n_j = len(seq_i), len(seq_j)
-    if n_i > n_j:
+    if n_i < n_j:
         n_i, n_j = n_j, n_i
         seq_i, seq_j = seq_j, seq_i
 
@@ -38,8 +38,8 @@ def nw(seq_i, seq_j, match, mismatch, gap): # We change the order of the paramet
                 
                 mat_scores[i][j] = max(diag, left, up)
 
-                if up > left and up > up: # We check up first!!
-                    mat_arrows[i][j] = 0  # up (deletion)
+                if up > left and up > diag: # We check up first!!
+                    mat_arrows[i][j] = 1  # up (deletion)
                 elif left > up:
                     mat_arrows[i][j] = -1  # left (insertion)
                 else:                      # We check diagonal last (tie case)!!
@@ -82,8 +82,8 @@ def nw(seq_i, seq_j, match, mismatch, gap): # We change the order of the paramet
             aln_j.append("-")
     # Print the alignment
     print("\nAlignment:") # We change the order of the prints here!!
-    print("".join(aln_j[::-1]))
-    print("".join(aln_i[::-1])) 
+    print("".join(aln_i[::-1]))
+    print("".join(aln_j[::-1])) 
 
 nw(args.seq_i, args.seq_j, args.match, args.mismatch, args.gap)
 
