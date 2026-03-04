@@ -1,11 +1,11 @@
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument("seq_i", type=str, help="the first sequence")
-parser.add_argument("seq_j", type=str, help="the second sequence")
-parser.add_argument("match", type=int, help="match score")
-parser.add_argument("mismatch", type=int, help="mismatch score")
-parser.add_argument("gap", type=int, help="gap score")
+parser.add_argument("seq_i", type=str, help="First sequence")
+parser.add_argument("seq_j", type=str, help="Second sequence")
+parser.add_argument("match", type=int, help="Match score")
+parser.add_argument("mismatch", type=int, help="Mismatch score")
+parser.add_argument("gap", type=int, help="Gap score")
 
 args = parser.parse_args()
 
@@ -58,16 +58,30 @@ def nw(seq_i, seq_j, match, mismatch, gap):
                         mat[i][j] = 1
                     else:
                         # Map varaibles names to values
-                        possibilities = {
-                            "left": scores[i][j-1],
-                            "up": scores[i-1][j],
-                            "diag": scores[i-1][j-1]
-                        }
-                        # Get the name of the max value
-                        max_possibility = max(possibilities, key=possibilities.get) 
-                        # possibilities.get tells to compare the values of the keys but to return the key
+                        if a[i] == b[j]:
+                            diag = scores[i-1][j-1] + match
+                        else:
+                            diag = scores[i-1][j-1] + mismatch
 
-                        mat[i][j] = arrow_scores[max_possibility]
+                        up = scores[i-1][j] + gap
+                        left = scores[i][j-1] + gap
+
+                        possibilities = {
+                            "diag": diag,
+                            "up": up,
+                            "left": left
+                        }
+                         # Fill the score matrix
+                        scores[i][j] = max(diag, left, up)
+
+                        # Fill the traceback matrix deterministically
+                        if diag >= left and diag >= up:
+                            mat[i][j] = 0  # diagonal
+                        elif left >= up:
+                            mat[i][j] = -1  # left
+                        else:
+                            mat[i][j] = 1  # up
+
             mat[-1][-1] = 0 # Set the last cell as 0 (where we will start)
             return mat
 
@@ -103,6 +117,7 @@ def nw(seq_i, seq_j, match, mismatch, gap):
             aln_i.append(seq_i[i])
             aln_j.append("-")
     # Print the alignment
+    print("Alignment:")
     print("".join(aln_i[::-1]))
     print("".join(aln_j[::-1]))
 
