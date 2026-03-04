@@ -9,9 +9,12 @@ parser.add_argument("gap", type=int, help="Gap score")
 
 args = parser.parse_args()
 
-def nw(seq_j, seq_i, match, mismatch, gap): # We change the order of the parameters!!
+def nw(seq_i, seq_j, match, mismatch, gap): # We change the order of the parameters!!
     # Store the lengths of the sequences
     n_i, n_j = len(seq_i), len(seq_j)
+    if n_i > n_j:
+        n_i, n_j = n_j, n_i
+        seq_i, seq_j = seq_j, seq_i
 
     # Initialize scores and traceback matrices
     def scores_arrows_matrix(a, b, match, mismatch, gap):
@@ -79,9 +82,21 @@ def nw(seq_j, seq_i, match, mismatch, gap): # We change the order of the paramet
             aln_j.append("-")
     # Print the alignment
     print("\nAlignment:") # We change the order of the prints here!!
-    print("".join(aln_j[::-1])) 
     print("".join(aln_i[::-1]))
+    print("".join(aln_j[::-1])) 
 
 nw(args.seq_i, args.seq_j, args.match, args.mismatch, args.gap)
 
-# Given I'm using a function to compute all, by just changing the order of the main function parameters, we obtain the same result as inverting the order.
+# We want to make sure that, regardless of the order, we obtain the same output.
+# To ensure that, we can check at the beginning the lengths and determine which will be in the row/col depending on which is the longest/shortest
+# This way we have a consistent result regardless of the input order
+
+# So:
+# $ python nw_alt1.py THERAT THEBIGCAT  8 -8 -4
+# $ python nw_alt1.py THEBIGCAT THERAT 8 -8 -4
+# Outputs the same:
+
+# Optimal score: 20
+# Alignment:
+# THE----RAT
+# THEBIGC-AT
