@@ -11,9 +11,7 @@
 
 # Ignore additional files and directories
 __pycache__/
-
 P1/convert_alignment/abc*
 P1/convert_alignment/prep/
-P5/gotoh/steb-by-step_gotoh.txt
-
+P6/gotoh/steb-by-step_gotoh.txt
 .vscode/*
