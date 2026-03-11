@@ -11,9 +11,21 @@ def build_index(db_seqs, k):
     >>> build_index(["AAA"], 2)
     {'AA': [(0, 0), (0, 1)]}
     """
-    # FILL IN
-    return dict(sorted(db.items()))
+    db = {}
+    for i, seq in enumerate(db_seqs): # Using enumarete() allows us to obtain both the position of the seq and the seq itself
+        for j in range(len(seq) - k + 1): # To have a "sliding window" frame
+            # Compute the substring (remember to apply the window [j: j + k])
+            substring = seq[j: j + k]
+            
+            # We compute the tuple, which is just (i, j)
+            index = (i, j)
 
+            if substring not in db:
+                # Store the new kmer in the dictionary
+                db[substring] = [index]
+            else:
+                db[substring].append(index)
+    return dict(sorted(db.items()))
 
 if __name__ == "__main__":
     print(build_index(["MRTAY", "KTMKT"], 3))
