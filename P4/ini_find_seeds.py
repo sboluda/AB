@@ -1,4 +1,5 @@
 from Bio.Align import substitution_matrices
+from ini_build_index import build_index
 
 # from build_index import build_index
 
@@ -14,25 +15,29 @@ def find_seeds(query, db, k, t):
     >>> find_seeds("MKT", db, 3, 11)
     [{'db_iseq': 1, 'db_pos': 2, 'q_pos': 0, 'q_kmer': 'MKT', 'db_kmer': 'MKT', 'score': 15.0}, {'db_iseq': 0, 'db_pos': 0, 'q_pos': 0, 'q_kmer': 'MKT', 'db_kmer': 'MRT', 'score': 12.0}]
     """
-    query_kmers = __ # complete
+    subst_mat = substitution_matrices.load("BLOSUM62")
+    query_kmers = db
     seeds = []
-    for __ # complete
-        for __  # complete
-            score = # complete
-            if score # complete
+    for i in range(len(query) - k + 1):
+        for key_kmer, positions in query_kmers.items():
+            query_kmer = query[i: i + k]
+            score = sum(
+                subst_mat[i, j]
+                for i, j in zip(query_kmer, key_kmer)
+            )
+            if score > t:
                 for db_iseq, db_pos in positions:
                     seeds.append(
                         {
                             "db_iseq": db_iseq,
                             "db_pos": db_pos,
-                            "q_pos": q_pos,
-                            "q_kmer": q_word,  # original query k-mer
-                            "db_kmer": db_word,  # matched db k-mer (may differ)
+                            "q_pos": i,
+                            "q_kmer": query_kmer,  # original query k-mer
+                            "db_kmer": key_kmer,  # matched db k-mer (may differ)
                             "score": score,
                         }
                     )
     return seeds
-
 
 if __name__ == "__main__":
     k = 3
