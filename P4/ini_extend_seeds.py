@@ -6,8 +6,8 @@ subst_mat = substitution_matrices.load("BLOSUM62")
 def extend_seeds(seeds, query, db_seqs, k, X=15):
     """Extend seeds in both directions using the BLOSUM62 matrix. Return a list of hits.
 
-    >>> seeds = [{'db_iseq': 1, 'db_pos': 2, 'q_pos': 0, 'q_kmer': 'MKT', 'db_kmer': 'MKT', 'score': 15.0}, {'db_iseq': 0, 'db_pos': 0, 'q_pos': 0, 'q_kmer': 'MKT', 'db_kmer': 'MRT', 'score': 12.0}]
-    >>> db_seqs = ["MRTAY", "KTLKT"]
+    >>> seeds = [{'db_iseq': 1, 'db_pos': 2, 'q_pos': 0, 'q_kmer': 'MKT', 'db_kmer': 'LKT', 'score': 12.0}, {'db_iseq': 0, 'db_pos': 0, 'q_pos': 0, 'q_kmer': 'MKT', 'db_kmer': 'MRT', 'score': 12.0}]
+    >>> db_seqs = ["MRTAY", "KTLKT"]  
     >>> extend_seeds(seeds, "MKTAY", db_seqs, 3, X=15)
     [{'db_iseq': 1, 'query_start': 0, 'query_end': 2, 'db_start': 2, 'db_end': 4, 'query_seq': 'MKT', 'db_seq': 'LKT', 'seed': 'MKT'}, {'db_iseq': 0, 'query_start': 0, 'query_end': 4, 'db_start': 0, 'db_end': 4, 'query_seq': 'MKTAY', 'db_seq': 'MRTAY', 'seed': 'MKT'}]
     """
@@ -17,10 +17,10 @@ def extend_seeds(seeds, query, db_seqs, k, X=15):
     )  # to avoid duplicates, stores tuples (db_iseq, q_start, q_end, db_start, db_end)
 
     for s in seeds:
-        q_pos = ___ # complete
-        db_iseq = ___ # complete
-        db_pos = ___ # complete
-        db_seq = ___ # complete
+        q_pos = s["q_pos"]            # Query kmer match start position
+        db_iseq = s["db_iseq"]        # Sequence position in DB (our db_seqs list)
+        db_pos = s["db_pos"]          # Sequence kmer match start position
+        db_seq = db_seqs[db_iseq]   # The Sequence itself
 
         # --- Extend right ---
         score, best_score, best_right = 0, 0, 0
@@ -30,20 +30,28 @@ def extend_seeds(seeds, query, db_seqs, k, X=15):
             and db_pos + k + right < len(db_seq)
             and score >= best_score - X
         ):
-            score += __ # complete
-            if score ___ # complete
-                best_score = score
-                best_right = right + 1
-            right += 1
+            score += subst_mat[                         # We compute the next right index position value for query and db_seq
+                        query[q_pos + k + right] ,
+                        db_seq[db_pos + k + right]
+                        ] 
+            if score > best_score:                      # If the score passes the best_score... 
+                best_score = score                      # We store the new best_score
+                best_right = right + 1                  # We store the new best_right position score
+            right += 1                                  # We move one further position to the right
 
         # --- Extend left ---
         score, best_score, best_left = 0, 0, 0
         left = 0
         while (
-            q_pos - left - 1 >= 0 and db_pos - left - 1 >= 0 and score >= best_score - X
+            q_pos - left - 1 >= 0 
+            and db_pos - left - 1 >= 0 
+            and score >= best_score - X
         ):
-            score += ___ # complete
-            if score ___ # complete
+            score += subst_mat[ 
+                        query[q_pos - left - 1] ,
+                        db_seq[db_pos - left - 1]
+                        ] 
+            if score > best_score:
                 best_score = score
                 best_left = left + 1
             left += 1
@@ -70,8 +78,7 @@ def extend_seeds(seeds, query, db_seqs, k, X=15):
             )
 
     return hits
-
-
+    
 if __name__ == "__main__":
     db_seqs = ["MRTAY", "KTLKT"]
     seeds = [
@@ -80,8 +87,8 @@ if __name__ == "__main__":
             "db_pos": 2,
             "q_pos": 0,
             "q_kmer": "MKT",
-            "db_kmer": "MKT",
-            "score": 15.0,
+            "db_kmer": "LKT",
+            "score": 12.0,
         },
         {
             "db_iseq": 0,
