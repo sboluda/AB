@@ -9,7 +9,6 @@ from ini_find_seeds import find_seeds
 from ini_extend_seeds import extend_seeds
 from ini_merge_overlapping import merge_overlapping
 
-
 def build_index(db_seqs, k):
     db = {}
     for i, seq in enumerate(db_seqs): # Using enumarete() allows us to obtain both the position of the seq and the seq itself
