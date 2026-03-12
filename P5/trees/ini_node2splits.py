@@ -21,7 +21,18 @@ def node2splits(i_node, nodes):
     ['hmgb_chite', 'hmgl_wheat', 'hmgl_trybr', 'hmgt_mouse']
     """
 
-    # FILL IN THE CODE
+    if nodes[i_node].left == 0:
+        return [nodes[i_node].name]
+    
+    left_list = node2splits(
+        nodes[i_node].left,
+        nodes
+        )
+    
+    right_list = node2splits(
+        nodes[i_node].right,
+        nodes
+        )
 
     print(left_list, right_list)
     return left_list + right_list

@@ -17,9 +17,19 @@ def node2leaves(i_node: int, nodes: list) -> list[str]:
     >>> node2leaves(7, newick2nodes("((A,B),((C,(D,E)),F));"))
     ['E', 'D']
     """
+    if nodes[i_node].left == 0:
+        return [nodes[i_node].name]
+    
+    right_leaves = node2leaves(
+        nodes[i_node].right,
+        nodes
+        )
 
-    # fill in the code here
-
+    left_leaves = node2leaves(
+        nodes[i_node].left,
+        nodes
+        )
+    
     return right_leaves + left_leaves
 
 

@@ -12,13 +12,24 @@ def sisters(nodes):
     >>> sisters(newick2nodes("(((hmgb_chite:0.10,hmgl_wheat:0.25):0.20,hmgl_trybr:0.60):0.25,hmgt_mouse:0.35);"))
     [(3, 4, 2)]
     """
+    
+    all_leaves = [
+        (i, value) 
+        for i, value in nodes.items()
+        if value.right == 0
+    ]
+    all_sisters = []
+    
+    for i in range(len(all_leaves) - 1):
+        if all_leaves[i][1].parent == all_leaves[i+1][1].parent:
+            all_sisters.append((
+                all_leaves[i][0],
+                all_leaves[i+1][0],
+                all_leaves[i][1].parent
+                )
+            )
 
-    output = []
-
-    # FILL IN THE CODE HERE
-
-    return output
-
+    return all_sisters
 
 if __name__ == "__main__":
     print(sisters(newick2nodes("((A,B),((C,(D,E)),F));")))
