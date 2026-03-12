@@ -11,9 +11,11 @@ def fasta2dict(filename):
     {'A_RAT': Seq('a--rat-'), 'THE_RATS': Seq('therats')}
     """
     records = SeqIO.parse(filename, "fasta")
-
-    # FILL IN
-    # return dict
+    sequences = {
+        record.id: record.seq
+        for record in records
+    }
+    return sequences
 
 
 if __name__ == "__main__":
